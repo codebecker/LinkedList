@@ -1,2 +1,3 @@
 # LinkedList
-LinkedList with implmentation of dynamic data types.
+Implementation of generic LinkedList.
+
