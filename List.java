@@ -1,57 +1,57 @@
 package linkedList;
 
+import java.util.NoSuchElementException;
+
 /**
- * LinkedList implementation with double link.
+ * Implementation of double Linked list.
  * 
+ * @param T
+ *            Object which will be saved in list
  * @author Chris
  */
 public class List<T> {
-	// first an last element pointing at null by default
-	private ListElement<T> firstElement = null;
-	private ListElement<T> lastElement = null;
+	private ListElement<T> firstElement, lastElement;
+	
+	private int size = 0;
 
 	/**
-	 * Generates a new empty List
-	 */
-	public List() {
-	}
-
-	/**
-	 * Add an entry at the beginning.
+	 * Add entry at the beginning.
 	 * 
-	 * @param object
-	 *            object witch should be saved.
+	 * @param content
+	 *            content of the entry.
 	 */
-	public void addFirst(T object) {
-		ListElement<T> newElement = new ListElement<T>(object);
+	public void addFirst(T content) {
+		ListElement<T> newElement = new ListElement<T>(content);
 		if (firstElement == null) {
 			firstElement = newElement;
 			lastElement = newElement;
 		} else {
-			newElement.setNextElem(firstElement);
-			firstElement.setPreviousElem(newElement);
+			newElement.setNextElement(firstElement);
+			firstElement.setPreviousElement(newElement);
 			firstElement = newElement;
 		}
+		size ++;
 	}
 
 	/**
 	 * Adds an entry at the end.
 	 * 
-	 * @param object
-	 *            object witch should be saved.
+	 * @param content
+	 *            content of the entry.
 	 */
-	public void addLast(T object) {
+	public void addLast(T content) {
 
-		ListElement<T> newElement = new ListElement<T>(object);
+		ListElement<T> newElement = new ListElement<T>(content);
 
 		if (firstElement == null) {
 			firstElement = newElement;
 			lastElement = newElement;
 		} else {
-			newElement.setPreviousElem(lastElement);
-			lastElement.setNextElem(newElement);
+			newElement.setPreviousElement(lastElement);
+			lastElement.setNextElement(newElement);
 			lastElement = newElement;
 		}
+		size ++;
 
 	}
 
@@ -61,14 +61,16 @@ public class List<T> {
 	 * @param index
 	 *            Index at which the entry should be added.
 	 * @param object
-	 *            object witch should be saved.
+	 *            object which should be saved.
 	 */
-	public void addNewElement(int index, T object) {
-		ListElement<T> pointerElem = firstElement;
-		ListElement<T> newElement = new ListElement<T>(object);
+	public void add(int index, T object) {
 
-		// check if index is out of bounce
-		assert (index >= 0 & index <= this.getSize()) : "Can't add entry's outside a lists border";
+		if (index < 0 || index > this.getSize()) {
+			throw new IndexOutOfBoundsException("Length of List: " + this.getSize() + " Index: " + index);
+		}
+
+		ListElement<T> indexElement = firstElement;
+		ListElement<T> newElement = new ListElement<T>(object);
 
 		if (firstElement == null) {
 			firstElement = newElement;
@@ -78,86 +80,82 @@ public class List<T> {
 		} else if (index == this.getSize()) {
 			this.addLast(object);
 		} else {
-			// searches for the element
 			for (int i = 0; i < index; i++) {
-				pointerElem = pointerElem.getNextElem();
+				indexElement = indexElement.getNextElement();
 			}
 
 			// add the element at the position
-			newElement.setPreviousElem(pointerElem.getPreviousElem());
-			pointerElem.setPreviousElem(newElement);
-			newElement.setNextElem(pointerElem);
-			newElement.getPreviousElem().setNextElem(newElement);
+			newElement.setPreviousElement(indexElement.getPreviousElement());
+			indexElement.setPreviousElement(newElement);
+			newElement.setNextElement(indexElement);
+			newElement.getPreviousElement().setNextElement(newElement);
 
 		}
+		size ++;
 	}
 
 	/**
-	 * Search an entry at the specified index.
-	 * 
 	 * @param index
-	 *            index ot the entry which should be.
+	 *            index of the entry.
 	 * @return Value of the entry.
 	 */
-	public T getListelementContent(int index) {
-		ListElement<T> pointerElem = firstElement;
-		assert (firstElement != null) : "Can't get entry's from an empty list";
-
-		// check if index is out of bounce
-		assert (index >= 0 & index <= this.getSize()) : "Index is out of bounce";
+	public T get(int index) {
+		// check if index is out of bounds
+		if (index < 0 || index >= this.getSize()) {
+			throw new IndexOutOfBoundsException("Length of List: " + this.getSize() + " Index: " + index);
+		}
+		ListElement<T> indexElement = firstElement;
 
 		for (int i = 0; i < index; i++) {
-			pointerElem = pointerElem.getNextElem();
+			indexElement = indexElement.getNextElement();
 		}
-		T content = pointerElem.getContent();
+		T content = indexElement.getContent();
 		return content;
 	}
 
 	/**
-	 * Delete the first entry.
+	 * Removes first entry
 	 * 
-	 * @return Value of the deleted entry.
+	 * @return Value of the removed entry.
 	 */
 	public T removeFirst() {
 
-		assert (firstElement != null) : "Can't delete from an empty list";
+		if (firstElement == null) {
+			throw new NoSuchElementException("Can't remove from an empty list");
+		}
 
-		T deletedContendBuffer = firstElement.getContent();
+		T removedContent = firstElement.getContent();
 
-		firstElement.getNextElem().setPreviousElem(null);
-		firstElement = firstElement.getNextElem();
-		return deletedContendBuffer;
+		firstElement.getNextElement().setPreviousElement(null);
+		firstElement = firstElement.getNextElement();
+		size --;
+		return removedContent;
 	}
 
 	/**
-	 * Delete the last entry.
+	 * Removes the last entry.
 	 * 
-	 * @return Value of the deleted entry.
+	 * @return Value of the removed entry.
 	 */
 	public T removeLast() {
-		// check if list is empty
-		assert (firstElement != null) : "Can't delete from an empty list";
+		if (firstElement == null) {
+			throw new NoSuchElementException("Can't remove from an empty list");
+		}
 
-		T deletedContendBuffer = lastElement.getContent();
-		lastElement.getPreviousElem().setNextElem(null);
-		lastElement = lastElement.getPreviousElem();
-		return deletedContendBuffer;
+		T removedContent = lastElement.getContent();
+		lastElement.getPreviousElement().setNextElement(null);
+		lastElement = lastElement.getPreviousElement();
+		size --;
+		return removedContent;
 	}
 
 	/**
-	 * Get number of entry's.
+	 * Get amount of entries.
 	 * 
-	 * @return number of entry's as Integer.
+	 * @return amount of entries as Integer.
 	 */
 	public int getSize() {
-		int counter = 0;
-		ListElement<T> pointerElement = firstElement;
-		// iterate through the list and count number of entry's
-		while (pointerElement != null) {
-			counter++;
-			pointerElement = pointerElement.getNextElem();
-		}
-		return counter;
+		return size;
 	}
 
 }

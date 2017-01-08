@@ -1,81 +1,45 @@
 package linkedList;
 
 /**
- * ListElement represent entry's in LinkedLists. Each ListElement knows his
- * previous and next neighbor by default pointing at null.
+ * ListElement represent entries in LinkedLists.
  * 
  * @author Chris
  */
 
 public class ListElement<T> {
 
-	// each ListElement knows his previous and next neighbor by default pointing
-	// at null.
-	// content type is dynamically allocated..
-	private ListElement<T> previousElem, nextElem;
+	/**
+	 * If there is no previous or next element it is pointing at null.
+	 */
+	private ListElement<T> previousElement, nextElement;
 	private T content;
 
 	/**
-	 * Generate an empty ListElement.
-	 */
-	public ListElement() {
-	}
-
-	/**
-	 * Generate a element with content
+	 * Generate an element with content.
 	 * 
 	 * @param newContent
-	 *            content to be saved in the element.
+	 *            content to be saved in the Element.
 	 */
 	public ListElement(T newContent) {
 		this.content = newContent;
 	}
-
-	/**
-	 * Get the previous ListElement. If it is null there is no previous
-	 * ListElement.
-	 * 
-	 * @return reference to the previous ListElement.
-	 */
-	public ListElement<T> getPreviousElem() {
-		return previousElem;
+	
+	public ListElement<T> getPreviousElement() {
+		return this.previousElement;
 	}
 
-	/**
-	 * Set the previous listElement
-	 * 
-	 * @param previousElem
-	 *            listElement which should be next Element.
-	 * 
-	 */
-	public void setPreviousElem(ListElement<T> previousElem) {
-		this.previousElem = previousElem;
+	public void setPreviousElement(ListElement<T> previousElem) {
+		this.previousElement = previousElem;
 	}
 
-	/**
-	 * Get the next listElement. If it is null there is no previous ListElement.
-	 * 
-	 * @return reference to the next listElement.
-	 */
-	public ListElement<T> getNextElem() {
-		return nextElem;
+	public ListElement<T> getNextElement() {
+		return nextElement;
 	}
 
-	/**
-	 * Set next ListElement.
-	 * 
-	 * @param nextElem
-	 *            reference to the next Element.
-	 */
-	public void setNextElem(ListElement<T> nextElem) {
-		this.nextElem = nextElem;
+	public void setNextElement(ListElement<T> nextElement) {
+		this.nextElement = nextElement;
 	}
 
-	/**
-	 * Get content of ListElement.
-	 * 
-	 * @return content with previously allocated type.
-	 */
 	public T getContent() {
 		return content;
 	}
